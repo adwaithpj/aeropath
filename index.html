@@ -1,0 +1,1431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pilot Pathway Console - India & South Africa Flight School Database</title>
+    <!-- Tailwind CSS for modern responsive styles -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for data visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome for standard pilot/aviation icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f1f5f9;
+            color: #1e293b;
+        }
+        /* Excel Table Specific Customizations */
+        .excel-table th {
+            position: sticky;
+            top: 0;
+            background-color: #f8fafc;
+            z-index: 10;
+            box-shadow: 0 1px 0 0 #cbd5e1;
+        }
+        .excel-table td, .excel-table th {
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+        }
+        .excel-table tr:hover {
+            background-color: #f1f5f9;
+        }
+        /* Hide scrollbars for slick layouts */
+        .hide-scroll::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scroll {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen">
+
+    <!-- Brand Banner -->
+    <header class="bg-slate-900 text-white shadow-xl sticky top-0 z-40 border-b border-sky-500/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center py-4 gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="p-2 bg-sky-500 rounded-lg text-slate-900 text-xl font-bold animate-pulse">
+                        <i class="fa-solid fa-plane-departure"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-extrabold tracking-tight text-white flex items-center gap-2">
+                            AeroPath Console <span class="text-xs bg-sky-400/20 text-sky-300 font-normal px-2 py-0.5 rounded-full border border-sky-400/30">v3.1 (2026 Live Updates)</span>
+                        </h1>
+                        <p class="text-xs text-slate-400">DGCA & SACAA Flight School Decision Matrix & Interactive Ledger</p>
+                    </div>
+                </div>
+                <!-- Nav Links -->
+                <nav class="flex flex-wrap gap-2 text-sm">
+                    <a href="#calculator" class="px-3 py-1.5 rounded-md hover:bg-slate-800 text-slate-300 hover:text-white transition-all"><i class="fa-solid fa-calculator mr-1"></i> Conversion Estimator</a>
+                    <a href="#excel-view" class="px-3 py-1.5 rounded-md hover:bg-slate-800 text-slate-300 hover:text-white transition-all"><i class="fa-solid fa-table mr-1"></i> Interactive Excel</a>
+                    <a href="#comparison" class="px-3 py-1.5 rounded-md hover:bg-slate-800 text-slate-300 hover:text-white transition-all"><i class="fa-solid fa-right-left mr-1"></i> Compare</a>
+                    <a href="#visual-cards" class="px-3 py-1.5 rounded-md hover:bg-slate-800 text-slate-300 hover:text-white transition-all"><i class="fa-solid fa-grip mr-1"></i> Browse Cards</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- Quick Insight & Overview -->
+        <section class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Strategic Insight Card -->
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200 lg:col-span-2 flex flex-col justify-between">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+                        <i class="fa-solid fa-compass-drafting text-sky-500"></i> The CPL Strategy Roadmap: India vs. South Africa
+                    </h2>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-4">
+                        For an Indian cadet, choosing between training directly under <strong>DGCA in India</strong> versus getting a <strong>SACAA License in South Africa</strong> and converting is the biggest career decision. South Africa delivers highly continuous flying weather (~300+ clear days/year) and lower base costs, but requires navigating the bureaucratic DGCA conversion. India skips conversion but is prone to weather delays (monsoons) and airspace congestion. This ledger compiles official 2026 performance data, latest ratings, and detailed financials to help you model your route.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-slate-100">
+                    <div class="p-3 bg-slate-50 rounded-xl text-center">
+                        <span class="text-xs text-slate-500 block">Avg. Cost (India Direct)</span>
+                        <span class="font-bold text-slate-800 text-lg">₹42 - 58 L</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl text-center">
+                        <span class="text-xs text-slate-500 block">Avg. Cost (SA Converted)</span>
+                        <span class="font-bold text-sky-600 text-lg">₹38 - 48 L</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl text-center">
+                        <span class="text-xs text-slate-500 block">Direct Duration</span>
+                        <span class="font-bold text-slate-800 text-lg">18 - 24 Mos</span>
+                    </div>
+                    <div class="p-3 bg-slate-50 rounded-xl text-center">
+                        <span class="text-xs text-slate-500 block">SA Route Duration</span>
+                        <span class="font-bold text-sky-600 text-lg">14 - 18 Mos</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Path Selector / Active Route Banner -->
+            <div class="bg-slate-900 text-slate-100 rounded-2xl p-6 shadow-md border border-slate-800 flex flex-col justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-2 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-amber-400"></i> Important 2026 DGCA Policy Update
+                    </h3>
+                    <p class="text-xs text-slate-400 leading-relaxed mb-4">
+                        Under the latest DGCA guidelines, Flight Training Organizations (FTOs) are classified into Categories A, B, and C based on aircraft availability, safety, and checkride turnaround. 
+                    </p>
+                    <ul class="text-xs text-slate-300 space-y-2">
+                        <li><span class="inline-block w-2 h-2 rounded-full bg-green-400 mr-2"></span><strong>Category A:</strong> Best safety, fast training completion.</li>
+                        <li><span class="inline-block w-2 h-2 rounded-full bg-blue-400 mr-2"></span><strong>Category B:</strong> Good standards, stable fleet.</li>
+                        <li><span class="inline-block w-2 h-2 rounded-full bg-yellow-400 mr-2"></span><strong>Category C:</strong> Under audit or facing operational delays.</li>
+                    </ul>
+                </div>
+                <div class="mt-4 pt-4 border-t border-slate-800">
+                    <a href="#conversion" class="text-xs font-semibold text-sky-400 hover:text-sky-300 flex items-center gap-1">
+                        View South Africa to India Conversion Flowchart <i class="fa-solid fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Route Estimator / Calculator Widget -->
+        <section id="calculator" class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+            <div class="border-b border-slate-100 pb-4 mb-6">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-money-bill-transfer text-emerald-500"></i> SA-to-India Conversion & Budget Calculator
+                </h2>
+                <p class="text-slate-500 text-sm">Quantify every hidden cost of the South African route and compare it against direct Indian training fees.</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Inputs panel -->
+                <div class="space-y-4 lg:col-span-2 bg-slate-50 p-6 rounded-xl border border-slate-100">
+                    <h3 class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-3 flex items-center gap-1">
+                        <i class="fa-solid fa-sliders text-sky-600"></i> Customize Your Path Parameters
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Select Target South African Academy</label>
+                            <select id="calc-sa-school" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-500 outline-none">
+                                <!-- Options will be dynamically populated -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Estimated Stay Duration in South Africa (Months)</label>
+                            <input type="number" id="calc-sa-months" value="14" min="6" max="24" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Monthly Living & Food Budget (INR)</label>
+                            <input type="number" id="calc-monthly-living" value="45000" step="5000" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Indian Skill Checks & Conversion Flying Costs (INR Lakhs)</label>
+                            <input type="number" id="calc-conversion-flying" value="4.5" step="0.5" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Visa Processing & Return Flight Tickets (INR)</label>
+                            <input type="number" id="calc-visa-flight" value="130000" step="10000" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">DGCA Exam Registrations & RTR Classes (INR)</label>
+                            <input type="number" id="calc-dgca-exam" value="95000" step="5000" class="w-full bg-white border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-500 outline-none">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Calculation Dashboard Panel -->
+                <div class="bg-slate-900 text-white rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <h3 class="font-semibold text-sky-400 text-xs uppercase tracking-widest mb-4"><i class="fa-solid fa-chart-pie mr-1"></i> Cost Compilation</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-400">Base Training Fee:</span>
+                                <span id="calc-out-base" class="font-medium text-slate-200">₹0.00 L</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-400">Total Living Stipend:</span>
+                                <span id="calc-out-living" class="font-medium text-slate-200">₹0.00 L</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-400">DGCA Conversion Flying:</span>
+                                <span id="calc-out-conv" class="font-medium text-slate-200">₹0.00 L</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-slate-400">Logistics & Exam Fees:</span>
+                                <span id="calc-out-logs" class="font-medium text-slate-200">₹0.00 L</span>
+                            </div>
+                            <div class="border-t border-slate-800 pt-3 flex justify-between items-end">
+                                <span class="text-sm font-semibold text-sky-300">True Path Cost:</span>
+                                <span id="calc-out-total" class="text-2xl font-black text-emerald-400">₹0.00 L</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 pt-4 border-t border-slate-800">
+                        <div class="p-3 bg-slate-800/60 rounded-lg border border-slate-800 text-xs text-slate-400 leading-relaxed">
+                            <span class="text-amber-400 font-semibold uppercase block mb-1"><i class="fa-solid fa-circle-exclamation mr-1"></i> Savings Contrast</span>
+                            With a direct Indian pathway averaging <strong class="text-white">₹46 Lakhs</strong>, choosing <span id="calc-out-academy-name" class="text-sky-300 font-semibold">this school</span> saves you <strong class="text-emerald-400" id="calc-savings-comparison">₹0.00 L</strong> and offers approximately <strong class="text-white">1.5x faster</strong> flight clearances.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Excel Spreadsheet Grid Section -->
+        <section id="excel-view" class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6 bg-slate-50 border-b border-slate-200">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                            <i class="fa-solid fa-file-excel text-emerald-600"></i> Interactive Flight Academy Ledger
+                        </h2>
+                        <p class="text-slate-500 text-sm">Sort, filter, toggle columns, and review complete academy details. You can even add custom data points directly into this mock spreadsheet ledger.</p>
+                    </div>
+                    <!-- Export, Reset and Add Buttons -->
+                    <div class="flex flex-wrap gap-2">
+                        <button onclick="exportToCSV()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-lg text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-download"></i> Export to CSV
+                        </button>
+                        <button onclick="openAddAcademyModal()" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold shadow-sm transition-all flex items-center gap-1.5">
+                            <i class="fa-solid fa-plus"></i> Add New FTO Row
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Excel Filters Toolbar -->
+                <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 bg-white p-4 rounded-xl border border-slate-200">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Search Academy / City</label>
+                        <div class="relative">
+                            <input type="text" id="search-input" oninput="applyFilters()" placeholder="Type school name..." class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs pl-8 focus:ring-2 focus:ring-sky-500 focus:bg-white outline-none">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3 top-3 text-slate-400 text-[10px]"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Filter by Region</label>
+                        <select id="country-filter" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-sky-500 focus:bg-white outline-none">
+                            <option value="All">All Regions</option>
+                            <option value="India">India 🇮🇳</option>
+                            <option value="South Africa">South Africa 🇿🇦</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Filter by DGCA Rating Category</label>
+                        <select id="rank-filter" onchange="applyFilters()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-sky-500 focus:bg-white outline-none">
+                            <option value="All">All Classifications</option>
+                            <option value="Category A">Category A (Indian Premium)</option>
+                            <option value="Category B">Category B (Indian Stable)</option>
+                            <option value="Category C">Category C (Indian Slipped/Delay)</option>
+                            <option value="SACAA Approved">SACAA Approved (South Africa)</option>
+                        </select>
+                    </div>
+                    <!-- Column Visibility Selector -->
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-500 mb-1">Select Custom Columns</label>
+                        <div class="flex flex-wrap gap-1.5">
+                            <button onclick="toggleColumn('col-rating')" id="btn-col-rating" class="px-2 py-1 bg-sky-100 text-sky-800 text-[10px] rounded border border-sky-300 font-semibold">★ Rating</button>
+                            <button onclick="toggleColumn('col-fleet')" id="btn-col-fleet" class="px-2 py-1 bg-sky-100 text-sky-800 text-[10px] rounded border border-sky-300 font-semibold">✈ Fleet</button>
+                            <button onclick="toggleColumn('col-reviews')" id="btn-col-reviews" class="px-2 py-1 bg-sky-100 text-sky-800 text-[10px] rounded border border-sky-300 font-semibold">💬 Reviews</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spreadsheet Grid -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs excel-table border-collapse">
+                    <thead>
+                        <tr class="bg-slate-100 text-slate-700">
+                            <th class="cursor-pointer" onclick="sortBy('name')">Flight Academy School Name <i class="fa-solid fa-sort ml-1"></i></th>
+                            <th class="cursor-pointer" onclick="sortBy('country')">Region <i class="fa-solid fa-sort ml-1"></i></th>
+                            <th>Location Details</th>
+                            <th class="cursor-pointer" onclick="sortBy('costNumeric')">Base Cost <i class="fa-solid fa-sort ml-1"></i></th>
+                            <th class="cursor-pointer" onclick="sortBy('durationNumeric')">Duration (Mos) <i class="fa-solid fa-sort ml-1"></i></th>
+                            <th class="cursor-pointer col-rating" onclick="sortBy('rating')">Authority Class / Score <i class="fa-solid fa-sort ml-1"></i></th>
+                            <th class="col-fleet">Fleet Strength</th>
+                            <th class="col-reviews">Student Community Review</th>
+                            <th class="text-center">Utility Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="excel-rows" class="bg-white divide-y divide-slate-100">
+                        <!-- Dynamic spreadsheet rows will be injected here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="p-4 bg-slate-50 border-t border-slate-200 text-right text-xs text-slate-500 font-medium">
+                Showing <span id="excel-row-count" class="text-slate-800 font-bold">0</span> of <span id="excel-row-total" class="text-slate-800 font-bold">0</span> entries
+            </div>
+        </section>
+
+        <!-- Side-by-Side Comparison Arena Section -->
+        <section id="comparison" class="bg-white rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200">
+            <div class="border-b border-slate-100 pb-4 mb-6">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-right-left text-indigo-500"></i> Side-by-Side Head-to-Head Comparison Arena
+                </h2>
+                <p class="text-slate-500 text-sm">Select any two flight academies from either region to review a strict head-to-head structural and cost profile contrast.</p>
+            </div>
+
+            <!-- Selector Selectors -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Select Candidate A</label>
+                    <select id="compare-a" onchange="runHeadToHead()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <!-- Options filled dynamically -->
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 mb-1">Select Candidate B</label>
+                    <select id="compare-b" onchange="runHeadToHead()" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2.5 text-sm font-semibold focus:ring-2 focus:ring-indigo-500 outline-none">
+                        <!-- Options filled dynamically -->
+                    </select>
+                </div>
+            </div>
+
+            <!-- Comparison Table Result Output -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm">
+                <!-- Column Header/Labels -->
+                <div class="hidden md:flex flex-col justify-between space-y-4 font-semibold text-slate-500 py-4">
+                    <div class="h-10 flex items-center border-b border-slate-100">Performance Metric</div>
+                    <div class="flex-1 py-2 border-b border-slate-100">Academy Name & Country</div>
+                    <div class="flex-1 py-2 border-b border-slate-100">Authority Classification</div>
+                    <div class="flex-1 py-2 border-b border-slate-100">Estimated Cost Range</div>
+                    <div class="flex-1 py-2 border-b border-slate-100">Estimated Course Duration</div>
+                    <div class="flex-1 py-2 border-b border-slate-100">Fleet Composition</div>
+                    <div class="flex-1 py-2 border-b border-slate-100">Key Inclusions</div>
+                    <div class="flex-1 py-2 border-b border-slate-100">Major Exclusions</div>
+                    <div class="flex-1 py-2">Our Reality Check Note</div>
+                </div>
+
+                <!-- Card A -->
+                <div class="bg-indigo-50/20 rounded-xl p-4 md:p-6 border border-indigo-100 flex flex-col justify-between">
+                    <div>
+                        <div class="md:h-10 flex items-center border-b border-slate-100 pb-2 mb-4">
+                            <span class="text-indigo-600 font-extrabold uppercase text-xs tracking-wider">Candidate A Profile</span>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Academy Name:</span>
+                                <h4 id="comp-a-name" class="text-lg font-bold text-slate-800">Choose school...</h4>
+                                <span id="comp-a-flag" class="text-sm"></span> <span id="comp-a-country" class="text-xs text-slate-500 uppercase font-bold tracking-wider"></span>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Classification:</span>
+                                <span id="comp-a-rank" class="px-2.5 py-1 text-xs rounded-full font-semibold"></span>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Estimated Cost:</span>
+                                <span id="comp-a-cost" class="font-bold text-slate-800"></span>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Duration:</span>
+                                <span id="comp-a-dur" class="font-medium text-slate-700"></span>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Fleet:</span>
+                                <span id="comp-a-fleet" class="text-xs text-slate-600"></span>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Inclusions:</span>
+                                <ul id="comp-a-inc" class="text-xs text-slate-600 space-y-1 list-disc list-inside"></ul>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Exclusions:</span>
+                                <ul id="comp-a-exc" class="text-xs text-red-600 space-y-1 list-disc list-inside"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-200">
+                        <span class="md:hidden block text-xs font-bold text-slate-400">Reality Check:</span>
+                        <p id="comp-a-note" class="text-xs italic text-slate-500 leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <!-- Card B -->
+                <div class="bg-indigo-50/20 rounded-xl p-4 md:p-6 border border-indigo-100 flex flex-col justify-between">
+                    <div>
+                        <div class="md:h-10 flex items-center border-b border-slate-100 pb-2 mb-4">
+                            <span class="text-indigo-600 font-extrabold uppercase text-xs tracking-wider">Candidate B Profile</span>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Academy Name:</span>
+                                <h4 id="comp-b-name" class="text-lg font-bold text-slate-800">Choose school...</h4>
+                                <span id="comp-b-flag" class="text-sm"></span> <span id="comp-b-country" class="text-xs text-slate-500 uppercase font-bold tracking-wider"></span>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Classification:</span>
+                                <span id="comp-b-rank" class="px-2.5 py-1 text-xs rounded-full font-semibold"></span>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Estimated Cost:</span>
+                                <span id="comp-b-cost" class="font-bold text-slate-800"></span>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Duration:</span>
+                                <span id="comp-b-dur" class="font-medium text-slate-700"></span>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Fleet:</span>
+                                <span id="comp-b-fleet" class="text-xs text-slate-600"></span>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Inclusions:</span>
+                                <ul id="comp-b-inc" class="text-xs text-slate-600 space-y-1 list-disc list-inside"></ul>
+                            </div>
+                            <div>
+                                <span class="md:hidden block text-xs font-bold text-slate-400">Exclusions:</span>
+                                <ul id="comp-b-exc" class="text-xs text-red-600 space-y-1 list-disc list-inside"></ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-slate-200">
+                        <span class="md:hidden block text-xs font-bold text-slate-400">Reality Check:</span>
+                        <p id="comp-b-note" class="text-xs italic text-slate-500 leading-relaxed"></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Academy Visual Cards Grid Area -->
+        <section id="visual-cards" class="space-y-6">
+            <div class="text-center max-w-3xl mx-auto">
+                <h2 class="text-3xl font-extrabold text-slate-900 tracking-tight">Interactive Visual Directory</h2>
+                <p class="text-slate-600 text-sm">Explore and discover the top flight training centers in India and South Africa. Select an entry to read deep detail panels with reviews, geo-coordinates, and operational advice.</p>
+            </div>
+
+            <!-- Country Segment Toggles -->
+            <div class="flex justify-center gap-2 mb-8">
+                <button onclick="renderVisualCards('All')" id="btn-grid-all" class="px-5 py-2 rounded-full font-semibold text-xs transition-all shadow-sm bg-slate-900 text-white">All Flight Schools</button>
+                <button onclick="renderVisualCards('India')" id="btn-grid-ind" class="px-5 py-2 rounded-full font-semibold text-xs transition-all shadow-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50">India Bases Only 🇮🇳</button>
+                <button onclick="renderVisualCards('South Africa')" id="btn-grid-za" class="px-5 py-2 rounded-full font-semibold text-xs transition-all shadow-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50">South Africa Bases Only 🇿🇦</button>
+            </div>
+
+            <div id="visual-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                <!-- Javascript will inject academy cards dynamically -->
+            </div>
+        </section>
+
+        <!-- Detailed Vertical CSS Flowchart Timeline -->
+        <section id="conversion" class="bg-white rounded-2xl p-8 shadow-sm border border-slate-200">
+            <div class="border-b border-slate-100 pb-4 mb-8">
+                <h2 class="text-2xl font-bold text-slate-900 flex items-center gap-2">
+                    <i class="fa-solid fa-timeline text-sky-500"></i> South Africa to India: Official DGCA License Conversion Path
+                </h2>
+                <p class="text-slate-500 text-sm">For cadets pursuing training abroad, obtaining a Commercial Pilot License is an structured multi-step timeline. We map the critical benchmarks below.</p>
+            </div>
+
+            <!-- Vertical Timeline Layout -->
+            <div class="relative border-l-2 border-slate-200 ml-4 md:ml-12 space-y-12">
+                
+                <!-- Step 1 -->
+                <div class="relative">
+                    <!-- Dot Marker -->
+                    <span class="absolute -left-[25px] top-1.5 flex items-center justify-center w-12 h-12 bg-white rounded-full border-4 border-sky-500 text-slate-800 text-sm font-bold shadow-md z-10">1</span>
+                    <div class="ml-10 bg-slate-50 rounded-xl p-5 border border-slate-200 shadow-xs">
+                        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                            <h4 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                                Phase I: DGCA Ground Exams Theory <span class="text-xs font-semibold text-sky-700 bg-sky-100 px-2 py-0.5 rounded-md">Prerequisite</span>
+                            </h4>
+                            <span class="text-xs text-slate-500 font-semibold"><i class="fa-solid fa-clock"></i> 2 - 6 Months</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Before leaving or immediately upon returning, a cadet must pass written examinations conducted by the Indian DGCA: Air Navigation, Aviation Meteorology, and Air Regulations. 
+                        </p>
+                        <div class="mt-3 text-xs font-medium text-slate-500 bg-white p-2.5 rounded-lg border border-slate-100 flex justify-between">
+                            <span>Cost: ~₹2,500 per paper attempt</span>
+                            <span>Highly Recommended: Clear before departing India</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative">
+                    <span class="absolute -left-[25px] top-1.5 flex items-center justify-center w-12 h-12 bg-white rounded-full border-4 border-slate-200 text-slate-800 text-sm font-bold shadow-md z-10">2</span>
+                    <div class="ml-10 bg-slate-50 rounded-xl p-5 border border-slate-200 shadow-xs">
+                        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                            <h4 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                                Phase II: CPL/IR Course Flight Training in South Africa <span class="text-xs font-semibold text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded-md">Overseas</span>
+                            </h4>
+                            <span class="text-xs text-slate-500 font-semibold"><i class="fa-solid fa-clock"></i> 12 - 15 Months</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Fly 200 total hours as mandated by SACAA, including a minimum of 100 hours Pilot-in-Command (PIC), Night Ratings (5 hours), Multi-Engine rating, and 40 instrument hours.
+                        </p>
+                        <div class="mt-3 text-xs font-medium text-slate-500 bg-white p-2.5 rounded-lg border border-slate-100 flex justify-between">
+                            <span>Average Airspace Flying: 300+ Days / Year</span>
+                            <span>Target: Secure SACAA CPL with ME/IR endorsement</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative">
+                    <span class="absolute -left-[25px] top-1.5 flex items-center justify-center w-12 h-12 bg-white rounded-full border-4 border-slate-200 text-slate-800 text-sm font-bold shadow-md z-10">3</span>
+                    <div class="ml-10 bg-slate-50 rounded-xl p-5 border border-slate-200 shadow-xs">
+                        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                            <h4 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                                Phase III: India Conversion Flying Skill Checks <span class="text-xs font-semibold text-red-700 bg-red-100 px-2 py-0.5 rounded-md">Practical Test</span>
+                            </h4>
+                            <span class="text-xs text-slate-500 font-semibold"><i class="fa-solid fa-clock"></i> 1 - 2 Months</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Upon landing in India, join an Indian Flight Training School. You must fly and pass specific checkrides with a DGCA examiner: General Flying Test (GFT) - Day and Night, and Instrument Rating (IR) check.
+                        </p>
+                        <div class="mt-3 text-xs font-medium text-slate-500 bg-white p-2.5 rounded-lg border border-slate-100 flex justify-between">
+                            <span>Expected Conversion Flying Budget: ₹3.5 - 5 Lakhs</span>
+                            <span>Exams Needed: Signal Test + RTR (Aero) License</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative">
+                    <span class="absolute -left-[25px] top-1.5 flex items-center justify-center w-12 h-12 bg-white rounded-full border-4 border-indigo-500 text-slate-800 text-sm font-bold shadow-md z-10">4</span>
+                    <div class="ml-10 bg-slate-50 rounded-xl p-5 border border-slate-200 shadow-xs">
+                        <div class="flex items-center justify-between flex-wrap gap-2 mb-2">
+                            <h4 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                                Phase IV: Portal Submission & Final License Issuance <span class="text-xs font-semibold text-indigo-700 bg-indigo-100 px-2 py-0.5 rounded-md">Verification</span>
+                            </h4>
+                            <span class="text-xs text-slate-500 font-semibold"><i class="fa-solid fa-clock"></i> 1 Month</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Submit verified South African logbooks, theoretical exam papers, RTR certification, Class I Medical records, and your checkride receipts onto the online eGCA portal for final Indian CPL print.
+                        </p>
+                        <div class="mt-3 text-xs font-medium text-slate-500 bg-white p-2.5 rounded-lg border border-slate-100 flex justify-between">
+                            <span>Processing Portal: eGCA</span>
+                            <span>Result: Full DGCA Commercial Pilot License</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Detailed Academy Modal Box Overlay -->
+    <div id="academy-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <div class="modal-overlay absolute inset-0" onclick="closeModal()"></div>
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-y-auto hide-scroll relative z-10 transform scale-95 transition-transform duration-300" id="modal-content">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 text-2xl font-bold p-2 leading-none transition-all">&times;</button>
+            
+            <div class="p-8">
+                <!-- Modal Top Header banner -->
+                <div class="flex items-start justify-between border-b border-slate-100 pb-6 mb-6 flex-wrap gap-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span id="m-flag" class="text-2xl"></span>
+                            <span id="m-location" class="text-xs font-semibold tracking-wider text-slate-400 uppercase"></span>
+                        </div>
+                        <h2 id="m-title" class="text-2xl md:text-3xl font-extrabold text-slate-900"></h2>
+                        <div class="mt-2 flex items-center gap-2 flex-wrap">
+                            <span id="m-rank-badge" class="px-3 py-1 rounded-full text-xs font-bold"></span>
+                            <span id="m-score" class="px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-100 text-slate-700"></span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div id="m-cost" class="text-2xl font-black text-sky-600"></div>
+                        <div id="m-duration" class="text-slate-500 text-xs mt-1 font-semibold"></div>
+                        <div class="mt-2" id="m-map-btn-holder"></div>
+                    </div>
+                </div>
+
+                <!-- Ground Info Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                    <!-- What is Included -->
+                    <div>
+                        <h4 class="flex items-center gap-2 text-sm font-bold text-slate-800 mb-4 border-b border-emerald-100 pb-2">
+                            <i class="fa-regular fa-square-plus text-emerald-500 text-base"></i> Comprehensive Course Inclusions
+                        </h4>
+                        <ul id="m-inclusions" class="space-y-3 text-slate-600 text-xs">
+                        </ul>
+                    </div>
+                    <!-- What is Excluded -->
+                    <div>
+                        <h4 class="flex items-center gap-2 text-sm font-bold text-slate-800 mb-4 border-b border-red-100 pb-2">
+                            <i class="fa-regular fa-square-minus text-red-500 text-base"></i> Crucial Hidden Exclusions
+                        </h4>
+                        <ul id="m-exclusions" class="space-y-3 text-red-600 text-xs">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Additional Deep Info Blocks -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 border-t border-slate-100 pt-6">
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                        <h5 class="font-bold text-slate-800 text-xs uppercase tracking-wide mb-2 flex items-center gap-1.5"><i class="fa-solid fa-helicopter text-sky-500"></i> Fleet Strength & Equipment</h5>
+                        <p id="m-fleet" class="text-slate-600 text-xs leading-relaxed"></p>
+                    </div>
+                    <div class="bg-slate-50 p-5 rounded-xl border border-slate-200">
+                        <h5 class="font-bold text-slate-800 text-xs uppercase tracking-wide mb-2 flex items-center gap-1.5"><i class="fa-solid fa-comments text-sky-500"></i> Student Community Review Summaries</h5>
+                        <p id="m-reviews" class="text-slate-600 text-xs italic leading-relaxed"></p>
+                    </div>
+                </div>
+
+                <div class="bg-slate-900 text-slate-100 p-6 rounded-xl border border-slate-800">
+                    <h4 class="font-bold text-sm text-sky-400 mb-2 flex items-center gap-1"><i class="fa-solid fa-circle-exclamation text-amber-400"></i> Reality Check & Operational Advice</h4>
+                    <p id="m-note" class="text-slate-300 text-xs leading-relaxed"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Custom Academy Row Modal -->
+    <div id="add-modal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 sm:p-6 opacity-0 transition-opacity duration-300">
+        <div class="modal-overlay absolute inset-0" onclick="closeAddModal()"></div>
+        <div class="bg-white rounded-2xl shadow-2xl w-full max-w-xl max-h-[90vh] overflow-y-auto p-6 relative z-10 transform scale-95 transition-transform duration-300" id="add-modal-content">
+            <button onclick="closeAddModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-800 text-2xl font-bold p-2 leading-none transition-all">&times;</button>
+            <h3 class="text-xl font-bold text-slate-900 mb-4 border-b border-slate-100 pb-3 flex items-center gap-1"><i class="fa-solid fa-plus-circle text-emerald-500"></i> Insert Custom FTO Entry</h3>
+            
+            <form id="add-academy-form" onsubmit="handleNewAcademySubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Academy Name</label>
+                    <input type="text" id="add-name" required class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-sky-500 focus:bg-white outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Region</label>
+                        <select id="add-country" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-sky-500 focus:bg-white outline-none">
+                            <option value="India">India</option>
+                            <option value="South Africa">South Africa</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Authority Classification</label>
+                        <select id="add-rank" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-sky-500 focus:bg-white outline-none">
+                            <option value="Category A">Category A</option>
+                            <option value="Category B">Category B</option>
+                            <option value="Category C">Category C</option>
+                            <option value="SACAA Approved">SACAA Approved</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Course Duration (Months)</label>
+                        <input type="number" id="add-duration" required min="1" max="48" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-sky-500 focus:bg-white outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Estimated Cost (INR Lakhs)</label>
+                        <input type="number" id="add-cost" required min="1" max="150" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-sky-500 focus:bg-white outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Location Details (City, State)</label>
+                    <input type="text" id="add-location" required class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-sky-500 focus:bg-white outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Aircraft Fleet Composition</label>
+                    <input type="text" id="add-fleet" value="Cessna 172, Glass cockpit Simulators" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-xs focus:ring-2 focus:ring-sky-500 focus:bg-white outline-none">
+                </div>
+                <div class="flex justify-end gap-2 pt-4 border-t border-slate-100">
+                    <button type="button" onclick="closeAddModal()" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-semibold transition-all">Cancel</button>
+                    <button type="submit" class="px-4 py-2 bg-slate-800 hover:bg-slate-900 text-white rounded-lg text-xs font-semibold transition-all">Add Academy</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer Information -->
+    <footer class="bg-slate-900 text-slate-400 py-12 text-center text-xs mt-16 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 space-y-4">
+            <p class="font-semibold text-slate-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-plane text-sky-500"></i> AeroPath Explorer Information System
+            </p>
+            <p class="max-w-3xl mx-auto leading-relaxed">
+                All training parameters, flight hour budgets, and fee quotes represent estimates for the 2026/2027 fiscal year. Exchange rates (ZAR to INR), regulatory modifications, and domestic diesel/aviation fuel fluctuations may affect the absolute figures. Ensure direct contract checking prior to sign-offs.
+            </p>
+            <p class="text-slate-600">© 2026 AeroPath. All Mock Rights Reserved. Built with Visual Grid Ledger Interactivity.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Highly descriptive structured dataset representing prominent flight centers in India and South Africa
+        const academies = [
+            // Indian Academies (Categories A, B, C)
+            {
+                id: 1,
+                name: "Avyanna Aviation Pvt. Ltd.",
+                country: "India",
+                flag: "🇮🇳",
+                location: "Kishangarh, Rajasthan",
+                costText: "₹44.0 - 48.0 Lakhs",
+                costNumeric: 46.0,
+                durationText: "12 - 14 Months",
+                durationNumeric: 13,
+                rank: "Category A",
+                rating: 4.8,
+                reviews: "Rated 4.8/5 by alumni. Praised for ultra-fast clear clearances, modern Tecnam glass planes, and zero winter delays in desert skies.",
+                fleet: "12+ Planes: Tecnam P2008 JC (Light Sport), advanced Tecnam P-Mentor, Cessna 172 Skyhawks with G1000 Glass Cockpit, plus Tecnam flight simulators.",
+                inclusions: ["200 Flight Hours with Glass Instrument training", "In-house CAR-145 MRO inspections", "Ground school instruction material", "Student lodging & meals during residency"],
+                exclusions: ["DGCA computerized exam attempt costs", "Signal & English RT exam registrations", "Initial pilot uniform kits", "Navigational landing fees at secondary terminals"],
+                note: "The single FTO in India to hold Category A status in the April 2026 DGCA rankings. Outstanding choice for direct ab-initio training in India with near zero weather downtime."
+            },
+            {
+                id: 2,
+                name: "IGRUA (Indira Gandhi Rashtriya Uran Akademi)",
+                country: "India",
+                flag: "🇮🇳",
+                location: "Rae Bareli, Uttar Pradesh",
+                costText: "₹45.0 - 50.0 Lakhs",
+                costNumeric: 47.5,
+                durationText: "18 - 24 Months",
+                durationNumeric: 21,
+                rank: "Category B",
+                rating: 4.5,
+                reviews: "Rated 4.5/5. Dubbed the 'IIT of Aviation'. Revered for extreme discipline, highly valued airline network, though batch wait times are long.",
+                fleet: "18+ Planes: Diamond DA40 Single Engine, DA42 Multi Engine, Zlin trainer aircraft.",
+                inclusions: ["200 flight hours on Diamond series", "Standardized ground classes", "Hostel accommodation", "Initial uniforms and flight kit bag"],
+                exclusions: ["Weekly mess catering charges (~₹10,000/month)", "DGCA written examinations fees", "Class 1 aviation medical evaluations"],
+                note: "Recently upgraded back to Category B. IGRUA holds immense prestige among domestic carriers, but monsoon periods and large student batches often push the real timeline close to 2 years."
+            },
+            {
+                id: 3,
+                name: "Chimes Aviation Academy (CAA)",
+                country: "India",
+                flag: "🇮🇳",
+                location: "Sagar, Madhya Pradesh",
+                costText: "₹37.7 - 46.0 Lakhs",
+                costNumeric: 41.8,
+                durationText: "16 - 20 Months",
+                durationNumeric: 18,
+                rank: "Category B",
+                rating: 4.3,
+                reviews: "Rated 4.3/5. Excellent weather stability in Central India. Popular path for the IndiGo Cadet program.",
+                fleet: "10+ Planes: Cessna 172 Skyhawks, Diamond DA42 Multi-Engine, simulator suites.",
+                inclusions: ["185 Single Engine hours + 15 Multi Engine hours", "CBT-based Ground School tuition", "Flight maps and training logbooks"],
+                exclusions: ["Student lodging contracts", "Hostel dining hall mess", "Class 1 medical renewal travels"],
+                note: "A solid Category B flight training school. The MP sky offers excellent consistency, making it a reliable domestic pathway with high training standards."
+            },
+            {
+                id: 4,
+                name: "Academy of Carver Aviation",
+                country: "India",
+                flag: "🇮🇳",
+                location: "Baramati, Maharashtra",
+                costText: "₹42.0 - 58.0 Lakhs",
+                costNumeric: 50.0,
+                durationText: "15 - 18 Months",
+                durationNumeric: 16.5,
+                rank: "Category B",
+                rating: 4.1,
+                reviews: "Rated 4.1/5. Highly structured training with modern facilities and in-house MRO, but prices are premium.",
+                fleet: "15+ Planes: Cessna 152, Cessna 172, Tech-rich Multi Engine trainers.",
+                inclusions: ["200 Flight Hours with Instrument Rating", "Complete Ground School program", "Premium study materials and charts"],
+                exclusions: ["Residency housing and boarding", "Transportation to and from runway hangar", "DGCA board verification fees"],
+                note: "Carver holds a Category B performance ranking. Offers good, safe infrastructure in Maharashtra but commands a premium cost compared to other regional FTOs."
+            },
+            {
+                id: 5,
+                name: "National Flying Training Institute (CAE Gondia)",
+                country: "India",
+                flag: "🇮🇳",
+                location: "Gondia, Maharashtra",
+                costText: "₹48.0 - 55.0 Lakhs",
+                costNumeric: 51.5,
+                durationText: "14 - 18 Months",
+                durationNumeric: 16,
+                rank: "Category B",
+                rating: 4.6,
+                reviews: "Rated 4.6/5. Outstanding airline simulation and crew-resource-management training. Elite SOPs.",
+                fleet: "14+ Planes: Diamond DA40, Garmin glass panels, Diamond DA42 Twins, modern FNPT II simulator.",
+                inclusions: ["200 Core flight hours (Diamond series)", "CAE global integrated ground curriculum", "Lodging & meals", "Full pilot uniform kits"],
+                exclusions: ["DGCA medical tests and renewals", "Travel costs during term holidays"],
+                note: "Operated as a joint venture with CAE. Incredible placement pipeline, but ranks among the costliest ways to get a direct CPL in India."
+            },
+            {
+                id: 6,
+                name: "Redbird Flight Training Academy",
+                country: "India",
+                flag: "🇮🇳",
+                location: "Baramati, Maharashtra",
+                costText: "₹40.0 - 45.0 Lakhs",
+                costNumeric: 42.5,
+                durationText: "18 - 24 Months",
+                durationNumeric: 21,
+                rank: "Category C",
+                rating: 3.8,
+                reviews: "Rated 3.8/5. Has the largest training fleet in India, but recently suffered from delayed checkrides and regulatory audits.",
+                fleet: "35+ Planes: Large fleet of Cessna 172s, Tecnam P2006T multi-engines, and specialized simulators.",
+                inclusions: ["Flight hours according to syllabus", "Ground School classes", "Basic simulator hours"],
+                exclusions: ["Food and student lodging services", "Internal airport landing taxes", "Travel and safety medical checks"],
+                note: "Currently in Category C due to operational challenges and audit delays. It has a massive plane fleet, but students should check actual queue times for checkrides."
+            },
+            {
+                id: 7,
+                name: "Madhya Pradesh Flying Club (MPFC)",
+                country: "India",
+                flag: "🇮🇳",
+                location: "Indore & Bhopal, MP",
+                costText: "₹37.0 - 40.0 Lakhs",
+                costNumeric: 38.5,
+                durationText: "12 - 18 Months",
+                durationNumeric: 15,
+                rank: "Category C",
+                rating: 4.2,
+                reviews: "Rated 4.2/5. Highly affordable and historically prestigious government setup. Tough merit-based intake.",
+                fleet: "6+ Planes: Cessna 152/172, Piper Seneca multi-engine.",
+                inclusions: ["200 Flight hours", "Ground school instruction", "Airport local navigation clearances"],
+                exclusions: ["Hostel living costs", "Local mess halls, flight gear and headsets"],
+                note: "Slipped to Category C in 2026 rankings, but remains an incredible ROI option if you secure a spot. Extremely disciplined and affordable, but entry seats are highly limited."
+            },
+            // South African Academies (SACAA Approved)
+            {
+                id: 8,
+                name: "43 Air School",
+                country: "South Africa",
+                flag: "🇿🇦",
+                location: "Port Alfred, Eastern Cape",
+                costText: "₹42.0 - 46.0 Lakhs (Converted)",
+                costNumeric: 44.0,
+                durationText: "12 - 14 Months",
+                durationNumeric: 13,
+                rank: "SACAA Approved",
+                rating: 4.7,
+                reviews: "Rated 4.7/5. South Africa's flagship flying school. Exceptional, military-style training ecosystem with complete base facilities.",
+                fleet: "50+ Planes: Massive fleet of Piper Cherokee, Piper Archer, Cessna 172, twin-engine Piper Seneca, high-fidelity sim cabins.",
+                inclusions: ["SACAA CPL/IR/ME flight hours", "On-site Student accommodation & three daily buffet meals", "Full pilot uniforms and aviation headset", "SACAA testing & licensing fees"],
+                exclusions: ["Return tickets from India to Port Alfred", "South African student study visa", "Indian DGCA conversion flying checkrides (~₹3-5 Lakhs)", "RTR Exam preparation"],
+                note: "Highly recommended for Indian students. The cost includes accommodation and food, making it extremely cost-competitive when you account for total living expenses abroad."
+            },
+            {
+                id: 9,
+                name: "Progress Flight Academy",
+                country: "South Africa",
+                flag: "🇿🇦",
+                location: "Port Elizabeth, Eastern Cape",
+                costText: "₹38.0 - 42.0 Lakhs (Converted)",
+                costNumeric: 40.0,
+                durationText: "12 - 15 Months",
+                durationNumeric: 13.5,
+                rank: "SACAA Approved",
+                rating: 4.6,
+                reviews: "Rated 4.6/5. Noted for premium multi-engine integration and direct, airline-ready transition formats.",
+                fleet: "15+ Planes: Piper Warrior Single Engine, Piper Seminole Twin Engine, advanced simulator units.",
+                inclusions: ["SACAA syllabus flying hours", "Housing accommodation at the flight academy", "Full ground school books and study packs"],
+                exclusions: ["International flights", "Self-catering grocery expenses", "Indian conversion flight checks at local FTOs"],
+                note: "One of the most professional schools in South Africa. Its intensive program structure helps cadets finish their 200 hours fast and build solid cockpit skills."
+            },
+            {
+                id: 10,
+                name: "Blue Chip Flight School",
+                country: "South Africa",
+                flag: "🇿🇦",
+                location: "Pretoria (Wonderboom Airport)",
+                costText: "₹35.0 - 38.0 Lakhs (Converted)",
+                costNumeric: 36.5,
+                durationText: "12 - 15 Months",
+                durationNumeric: 13.5,
+                rank: "SACAA Approved",
+                rating: 4.4,
+                reviews: "Rated 4.4/5. Flexible pay-as-you-fly billing. Busy Wonderboom airspace provides incredible radio-communication skills.",
+                fleet: "12+ Planes: Cessna 172, Piper PA28, glass cockpit trainers.",
+                inclusions: ["CPL/IR/ME flying hours", "Core ground tuition", "SACAA local checkride fees"],
+                exclusions: ["On-base accommodation (students rent nearby cottages)", "Visa permits", "Indian conversion flying checks", "Weekly dining/mess bills"],
+                note: "Excellent for self-reliant students. Since housing is separate, you can cut costs by flat-sharing with other Indian cadets nearby."
+            },
+            {
+                id: 11,
+                name: "Johannesburg School of Flying (JSF)",
+                country: "South Africa",
+                flag: "🇿🇦",
+                location: "Brakpan Airfield, Gauteng",
+                costText: "₹32.0 - 36.0 Lakhs (Converted)",
+                costNumeric: 34.0,
+                durationText: "14 - 16 Months",
+                durationNumeric: 15,
+                rank: "SACAA Approved",
+                rating: 4.2,
+                reviews: "Rated 4.2/5. Highly budget-friendly entry fees. Traditional, family-owned vibe but requires high self-reliance.",
+                fleet: "10+ Planes: Cessna 152/172 Skyhawks, Piper Cherokee.",
+                inclusions: ["SACAA flight hours syllabus", "Ground classes support", "Basic school briefings"],
+                exclusions: ["Accommodations & daily food", "Weekly shuttle transports to airfield", "Indian conversion flying", "Schengen/SA visa costs"],
+                note: "Provides one of the lowest entry costs for flight training in South Africa. Best suited for proactive cadets who are happy managing their own lodging and transport."
+            },
+            {
+                id: 12,
+                name: "Loutzavia Flight Training",
+                country: "South Africa",
+                flag: "🇿🇦",
+                location: "Pretoria (Wonderboom Airport)",
+                costText: "₹34.0 - 37.0 Lakhs (Converted)",
+                costNumeric: 35.5,
+                durationText: "12 - 15 Months",
+                durationNumeric: 13.5,
+                rank: "SACAA Approved",
+                rating: 4.3,
+                reviews: "Rated 4.3/5. Warm, student-centric culture with excellent instructor support and modern flight sims.",
+                fleet: "11+ Planes: Cessna 172s, Piper Single & Multi engine trainers, FNPT II Flight Simulators.",
+                inclusions: ["Flight hours up to SACAA CPL requirements", "Briefings & simulator training", "Basic ground tuition"],
+                exclusions: ["Boarding & housing", "DGCA conversions in India", "Medical examinations"],
+                note: "Operates from Wonderboom Airport. A friendly, high-quality training center with great weather, though students need to organize their own living arrangements nearby."
+            },
+            {
+                id: 13,
+                name: "Cape Town Flight Training Centre (CTFTC)",
+                country: "South Africa",
+                flag: "🇿🇦",
+                location: "Fisantekraal Airfield, Cape Town",
+                costText: "₹36.0 - 40.0 Lakhs (Converted)",
+                costNumeric: 38.0,
+                durationText: "12 - 15 Months",
+                durationNumeric: 13.5,
+                rank: "SACAA Approved",
+                rating: 4.5,
+                reviews: "Rated 4.5/5. Stunning coastal flying and excellent crosswind training. Weather delays can occur during winter storm peaks.",
+                fleet: "10+ Planes: Cessna 172, Tecnam trainers, multi-engine aircraft.",
+                inclusions: ["SACAA syllabus flying hours", "Ground class resources", "Pre-flight briefing classes"],
+                exclusions: ["Student living costs", "Visa clearances", "Conversion flight training in India"],
+                note: "Excellent for building crosswind landing skills due to Cape Town's winds. Highly professional, though winter monsoonal patterns can introduce short flying gaps."
+            }
+        ];
+
+        // Global variables for spreadsheet operations
+        let activeSortColumn = 'name';
+        let activeSortAscending = true;
+        let visibleColumns = {
+            'col-rating': true,
+            'col-fleet': true,
+            'col-reviews': true
+        };
+
+        // Initialize Spreadsheet and Page Logic
+        window.onload = function() {
+            populateCalculatorDropdown();
+            initCostCalculator();
+            renderSpreadsheet();
+            renderVisualCards('All');
+            initComparisonDropdowns();
+        };
+
+        // Populate Academy Select in Calculator & Comparison Dropdowns
+        function populateCalculatorDropdown() {
+            const selectEl = document.getElementById('calc-sa-school');
+            selectEl.innerHTML = '';
+            
+            // Filter South Africa options
+            const saSchools = academies.filter(a => a.country === 'South Africa');
+            saSchools.forEach(school => {
+                const opt = document.createElement('option');
+                opt.value = school.id;
+                opt.textContent = `${school.name} (Base Fee: ${school.costText})`;
+                selectEl.appendChild(opt);
+            });
+        }
+
+        function initComparisonDropdowns() {
+            const selA = document.getElementById('compare-a');
+            const selB = document.getElementById('compare-b');
+            
+            selA.innerHTML = '<option value="">-- Choose Candidate A --</option>';
+            selB.innerHTML = '<option value="">-- Choose Candidate B --</option>';
+
+            academies.forEach(school => {
+                const optA = document.createElement('option');
+                optA.value = school.id;
+                optA.textContent = `${school.flag} ${school.name}`;
+                selA.appendChild(optA);
+
+                const optB = document.createElement('option');
+                optB.value = school.id;
+                optB.textContent = `${school.flag} ${school.name}`;
+                selB.appendChild(optB);
+            });
+
+            // Set default selections
+            selA.value = 1; // Avyanna
+            selB.value = 8; // 43 Air School
+            runHeadToHead();
+        }
+
+        // Apply Spreadsheet Grid Filters
+        function applyFilters() {
+            renderSpreadsheet();
+        }
+
+        // Toggle Columns inside Excel Ledger
+        function toggleColumn(columnId) {
+            visibleColumns[columnId] = !visibleColumns[columnId];
+            
+            // Toggle classes
+            const elements = document.getElementsByClassName(columnId);
+            for(let i=0; i<elements.length; i++) {
+                if(visibleColumns[columnId]) {
+                    elements[i].classList.remove('hidden');
+                } else {
+                    elements[i].classList.add('hidden');
+                }
+            }
+
+            // Update button styles
+            const btn = document.getElementById(`btn-${columnId}`);
+            if(visibleColumns[columnId]) {
+                btn.className = "px-2 py-1 bg-sky-100 text-sky-800 text-[10px] rounded border border-sky-300 font-semibold";
+            } else {
+                btn.className = "px-2 py-1 bg-slate-100 text-slate-500 text-[10px] rounded border border-slate-300 font-semibold";
+            }
+        }
+
+        // Sort rows by specific column
+        function sortBy(column) {
+            if (activeSortColumn === column) {
+                activeSortAscending = !activeSortAscending;
+            } else {
+                activeSortColumn = column;
+                activeSortAscending = true;
+            }
+            renderSpreadsheet();
+        }
+
+        // Render Excel Rows
+        function renderSpreadsheet() {
+            const rowsContainer = document.getElementById('excel-rows');
+            rowsContainer.innerHTML = '';
+
+            const searchVal = document.getElementById('search-input').value.toLowerCase();
+            const countryVal = document.getElementById('country-filter').value;
+            const rankVal = document.getElementById('rank-filter').value;
+
+            // Filter
+            let filtered = academies.filter(item => {
+                const matchesSearch = item.name.toLowerCase().includes(searchVal) || item.location.toLowerCase().includes(searchVal);
+                const matchesCountry = (countryVal === 'All' || item.country === countryVal);
+                const matchesRank = (rankVal === 'All' || item.rank === rankVal);
+                return matchesSearch && matchesCountry && matchesRank;
+            });
+
+            // Sort
+            filtered.sort((a, b) => {
+                let valA = a[activeSortColumn];
+                let valB = b[activeSortColumn];
+
+                // Handle string comparisons gracefully
+                if(typeof valA === 'string') {
+                    return activeSortAscending ? valA.localeCompare(valB) : valB.localeCompare(valA);
+                }
+                return activeSortAscending ? valA - valB : valB - valA;
+            });
+
+            // Populate DOM
+            filtered.forEach(acad => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors";
+                
+                // Set badges for authority classification
+                let rankBadgeClass = "bg-slate-100 text-slate-700";
+                if (acad.rank === 'Category A') rankBadgeClass = "bg-green-100 text-green-800 border border-green-200";
+                else if (acad.rank === 'Category B') rankBadgeClass = "bg-sky-100 text-sky-800 border border-sky-200";
+                else if (acad.rank === 'Category C') rankBadgeClass = "bg-amber-100 text-amber-800 border border-amber-200 animate-pulse";
+                else if (acad.rank === 'SACAA Approved') rankBadgeClass = "bg-indigo-100 text-indigo-800 border border-indigo-200";
+
+                tr.innerHTML = `
+                    <td class="font-semibold text-slate-800 hover:text-sky-600 cursor-pointer" onclick="openModalById(${acad.id})">${acad.flag} ${acad.name}</td>
+                    <td class="font-medium text-slate-500">${acad.country}</td>
+                    <td class="text-slate-600">${acad.location}</td>
+                    <td class="font-bold text-slate-800">${acad.costText}</td>
+                    <td class="font-semibold text-slate-700 text-center">${acad.durationText}</td>
+                    <td class="col-rating">
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded-md text-[10px] font-bold ${rankBadgeClass}">${acad.rank}</span>
+                            <span class="text-amber-500 font-bold"><i class="fa-solid fa-star text-[10px]"></i> ${acad.rating}</span>
+                        </div>
+                    </td>
+                    <td class="col-fleet text-slate-500 line-clamp-1 max-w-[200px]" title="${acad.fleet}">${acad.fleet}</td>
+                    <td class="col-reviews text-slate-500 italic max-w-[200px] truncate" title="${acad.reviews}">${acad.reviews}</td>
+                    <td class="text-center p-2">
+                        <button onclick="openModalById(${acad.id})" class="px-2.5 py-1 bg-slate-100 hover:bg-sky-100 hover:text-sky-700 text-slate-600 rounded font-semibold transition-all flex items-center gap-1 mx-auto">
+                            <i class="fa-solid fa-expand text-[10px]"></i> View Details
+                        </button>
+                    </td>
+                `;
+                rowsContainer.appendChild(tr);
+            });
+
+            // Update counts
+            document.getElementById('excel-row-count').textContent = filtered.length;
+            document.getElementById('excel-row-total').textContent = academies.length;
+
+            // Apply visibility states to columns newly rendered
+            toggleColumn('col-rating'); toggleColumn('col-rating');
+            toggleColumn('col-fleet'); toggleColumn('col-fleet');
+            toggleColumn('col-reviews'); toggleColumn('col-reviews');
+        }
+
+        // Render Visual Directory cards
+        function renderVisualCards(filter) {
+            const grid = document.getElementById('visual-grid');
+            grid.innerHTML = '';
+
+            // Update UI filter tabs
+            ['all', 'ind', 'za'].forEach(id => {
+                const el = document.getElementById(`btn-grid-${id}`);
+                el.className = "px-5 py-2 rounded-full font-semibold text-xs transition-all shadow-sm bg-white text-slate-700 border border-slate-200 hover:bg-slate-50";
+            });
+            const activeId = filter === 'All' ? 'all' : (filter === 'India' ? 'ind' : 'za');
+            document.getElementById(`btn-grid-${activeId}`).className = "px-5 py-2 rounded-full font-semibold text-xs transition-all shadow-sm bg-slate-900 text-white";
+
+            const filteredData = filter === 'All' ? academies : academies.filter(a => a.country === filter);
+
+            filteredData.forEach(acad => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-2xl p-6 shadow-sm border border-slate-200 hover:shadow-lg hover:border-sky-300 transition-all cursor-pointer flex flex-col justify-between h-full group relative overflow-hidden";
+                card.onclick = () => openModal(acad);
+                
+                let rankBadgeClass = "bg-slate-100 text-slate-700";
+                if (acad.rank === 'Category A') rankBadgeClass = "bg-green-100 text-green-800 border border-green-200";
+                else if (acad.rank === 'Category B') rankBadgeClass = "bg-sky-100 text-sky-800 border border-sky-200";
+                else if (acad.rank === 'Category C') rankBadgeClass = "bg-amber-100 text-amber-800 border border-amber-200";
+                else if (acad.rank === 'SACAA Approved') rankBadgeClass = "bg-indigo-100 text-indigo-800 border border-indigo-200";
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${rankBadgeClass}">${acad.rank}</span>
+                            <div class="flex items-center gap-1 text-slate-400 font-semibold text-xs">
+                                <span><i class="fa-solid fa-star text-amber-500"></i> ${acad.rating}</span>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="text-2xl">${acad.flag}</span>
+                            <span class="text-[10px] font-bold tracking-wider text-slate-400 uppercase">${acad.location}</span>
+                        </div>
+                        <h3 class="text-base font-extrabold text-slate-800 mb-4 group-hover:text-sky-600 transition-colors line-clamp-2">${acad.name}</h3>
+                        <p class="text-slate-500 text-xs line-clamp-3 mb-4 leading-relaxed">${acad.reviews}</p>
+                    </div>
+                    <div class="pt-4 border-t border-slate-100 flex justify-between items-end mt-auto">
+                        <div>
+                            <p class="text-[9px] text-slate-400 uppercase tracking-wider font-bold">Estimated Cost</p>
+                            <p class="font-extrabold text-slate-800 text-sm">${acad.costText}</p>
+                        </div>
+                        <div class="text-right">
+                            <p class="text-[9px] text-slate-400 uppercase tracking-wider font-bold">Duration</p>
+                            <p class="font-extrabold text-slate-800 text-sm">${acad.durationText}</p>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Open Modal view with details
+        function openModal(acad) {
+            const modal = document.getElementById('academy-modal');
+            const backdrop = document.getElementById('academy-modal');
+            const modalContent = document.getElementById('modal-content');
+
+            document.getElementById('m-flag').textContent = acad.flag;
+            document.getElementById('m-location').textContent = acad.location;
+            document.getElementById('m-title').textContent = acad.name;
+            document.getElementById('m-cost').textContent = acad.costText;
+            document.getElementById('m-duration').textContent = acad.durationText;
+            document.getElementById('m-fleet').textContent = acad.fleet;
+            document.getElementById('m-reviews').textContent = acad.reviews;
+            document.getElementById('m-note').textContent = acad.note;
+            document.getElementById('m-score').innerHTML = `<i class="fa-solid fa-star text-amber-500 mr-1"></i> Authority Rating: ${acad.rating} / 5.0`;
+
+            const rankBadge = document.getElementById('m-rank-badge');
+            rankBadge.textContent = acad.rank;
+            
+            // Render specific category styling badges
+            if (acad.rank === 'Category A') rankBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-green-100 text-green-800 border border-green-200";
+            else if (acad.rank === 'Category B') rankBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-sky-100 text-sky-800 border border-sky-200";
+            else if (acad.rank === 'Category C') rankBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-100 text-amber-800 border border-amber-200";
+            else if (acad.rank === 'SACAA Approved') rankBadge.className = "px-3 py-1 rounded-full text-xs font-bold bg-indigo-100 text-indigo-800 border border-indigo-200";
+
+            // Generate map search hyperlink
+            const searchMapStr = encodeURIComponent(`${acad.name} ${acad.location}`);
+            const mapBtnHolder = document.getElementById('m-map-btn-holder');
+            mapBtnHolder.innerHTML = `
+                <a href="https://www.google.com/maps/search/?api=1&query=${searchMapStr}" target="_blank" class="inline-flex items-center gap-1 px-3 py-1.5 bg-sky-50 hover:bg-sky-100 text-sky-700 text-xs rounded-lg border border-sky-200 font-bold transition-all">
+                    <i class="fa-solid fa-map-location-dot"></i> View on Google Maps
+                </a>
+            `;
+
+            // List inclusions and exclusions
+            document.getElementById('m-inclusions').innerHTML = acad.inclusions.map(i => `<li class="flex items-start gap-2"><span class="text-emerald-500 mt-0.5"><i class="fa-solid fa-check"></i></span> <span>${i}</span></li>`).join('');
+            document.getElementById('m-exclusions').innerHTML = acad.exclusions.map(e => `<li class="flex items-start gap-2"><span class="text-red-500 mt-0.5"><i class="fa-solid fa-xmark"></i></span> <span>${e}</span></li>`).join('');
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modalContent.classList.remove('scale-95');
+                modalContent.classList.add('scale-100');
+            }, 10);
+            document.body.style.overflow = 'hidden';
+        }
+
+        function openModalById(id) {
+            const found = academies.find(a => a.id === id);
+            if(found) openModal(found);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('academy-modal');
+            const modalContent = document.getElementById('modal-content');
+            modal.classList.add('opacity-0');
+            modalContent.classList.remove('scale-100');
+            modalContent.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.body.style.overflow = '';
+            }, 300);
+        }
+
+        // Row Insertion/Add custom modal operations
+        function openAddAcademyModal() {
+            const m = document.getElementById('add-modal');
+            const content = document.getElementById('add-modal-content');
+            m.classList.remove('hidden');
+            setTimeout(() => {
+                m.classList.remove('opacity-0');
+                content.classList.remove('scale-95');
+                content.classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeAddModal() {
+            const m = document.getElementById('add-modal');
+            const content = document.getElementById('add-modal-content');
+            m.classList.add('opacity-0');
+            content.classList.remove('scale-100');
+            content.classList.add('scale-95');
+            setTimeout(() => {
+                m.classList.add('hidden');
+            }, 300);
+        }
+
+        function handleNewAcademySubmit(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('add-name').value;
+            const country = document.getElementById('add-country').value;
+            const rank = document.getElementById('add-rank').value;
+            const duration = parseFloat(document.getElementById('add-duration').value);
+            const cost = parseFloat(document.getElementById('add-cost').value);
+            const location = document.getElementById('add-location').value;
+            const fleet = document.getElementById('add-fleet').value;
+
+            const flag = country === 'India' ? "🇮🇳" : "🇿🇦";
+            const rating = country === 'India' ? (rank === 'Category A' ? 4.8 : 4.2) : 4.5;
+
+            const newAcademy = {
+                id: academies.length + 1,
+                name: name,
+                country: country,
+                flag: flag,
+                location: location,
+                costText: `₹${cost.toFixed(1)} Lakhs`,
+                costNumeric: cost,
+                durationText: `${duration} Months`,
+                durationNumeric: duration,
+                rank: rank,
+                rating: rating,
+                reviews: `Newly added custom entry. Highly reviewed as promising local FTO choice in ${location}.`,
+                fleet: fleet,
+                inclusions: ["Core Flight training hours block", "Ground class syllabi", "Airport clearances"],
+                exclusions: ["Syllabus books", "Food and lodging charges outside standard plans"],
+                note: "Added manually to the decision engine. Confirm directly with the local training operators for valid 2026 scheduling."
+            };
+
+            academies.push(newAcademy);
+            
+            // Re-render
+            populateCalculatorDropdown();
+            initComparisonDropdowns();
+            renderSpreadsheet();
+            renderVisualCards('All');
+            
+            closeAddModal();
+            document.getElementById('add-academy-form').reset();
+        }
+
+        // Compare Side-by-Side Area Logic
+        function runHeadToHead() {
+            const valA = document.getElementById('compare-a').value;
+            const valB = document.getElementById('compare-b').value;
+
+            const schoolA = academies.find(a => a.id == valA);
+            const schoolB = academies.find(b => b.id == valB);
+
+            if(schoolA) {
+                document.getElementById('comp-a-name').textContent = schoolA.name;
+                document.getElementById('comp-a-flag').textContent = schoolA.flag;
+                document.getElementById('comp-a-country').textContent = schoolA.country;
+                document.getElementById('comp-a-rank').textContent = schoolA.rank;
+                document.getElementById('comp-a-cost').textContent = schoolA.costText;
+                document.getElementById('comp-a-dur').textContent = schoolA.durationText;
+                document.getElementById('comp-a-fleet').textContent = schoolA.fleet;
+                document.getElementById('comp-a-note').textContent = schoolA.note;
+
+                let rankBadgeClass = "bg-slate-100 text-slate-700";
+                if (schoolA.rank === 'Category A') rankBadgeClass = "bg-green-100 text-green-800 border border-green-200";
+                else if (schoolA.rank === 'Category B') rankBadgeClass = "bg-sky-100 text-sky-800 border border-sky-200";
+                else if (schoolA.rank === 'Category C') rankBadgeClass = "bg-amber-100 text-amber-800 border border-amber-200";
+                else if (schoolA.rank === 'SACAA Approved') rankBadgeClass = "bg-indigo-100 text-indigo-800 border border-indigo-200";
+                document.getElementById('comp-a-rank').className = `px-2.5 py-1 text-xs rounded-full font-semibold ${rankBadgeClass}`;
+
+                document.getElementById('comp-a-inc').innerHTML = schoolA.inclusions.map(i => `<li>${i}</li>`).join('');
+                document.getElementById('comp-a-exc').innerHTML = schoolA.exclusions.map(e => `<li>${e}</li>`).join('');
+            }
+
+            if(schoolB) {
+                document.getElementById('comp-b-name').textContent = schoolB.name;
+                document.getElementById('comp-b-flag').textContent = schoolB.flag;
+                document.getElementById('comp-b-country').textContent = schoolB.country;
+                document.getElementById('comp-b-rank').textContent = schoolB.rank;
+                document.getElementById('comp-b-cost').textContent = schoolB.costText;
+                document.getElementById('comp-b-dur').textContent = schoolB.durationText;
+                document.getElementById('comp-b-fleet').textContent = schoolB.fleet;
+                document.getElementById('comp-b-note').textContent = schoolB.note;
+
+                let rankBadgeClass = "bg-slate-100 text-slate-700";
+                if (schoolB.rank === 'Category A') rankBadgeClass = "bg-green-100 text-green-800 border border-green-200";
+                else if (schoolB.rank === 'Category B') rankBadgeClass = "bg-sky-100 text-sky-800 border border-sky-200";
+                else if (schoolB.rank === 'Category C') rankBadgeClass = "bg-amber-100 text-amber-800 border border-amber-200";
+                else if (schoolB.rank === 'SACAA Approved') rankBadgeClass = "bg-indigo-100 text-indigo-800 border border-indigo-200";
+                document.getElementById('comp-b-rank').className = `px-2.5 py-1 text-xs rounded-full font-semibold ${rankBadgeClass}`;
+
+                document.getElementById('comp-b-inc').innerHTML = schoolB.inclusions.map(i => `<li>${i}</li>`).join('');
+                document.getElementById('comp-b-exc').innerHTML = schoolB.exclusions.map(e => `<li>${e}</li>`).join('');
+            }
+        }
+
+        // Advanced Cost & Path Conversion Calculator Logic
+        function initCostCalculator() {
+            const selectors = [
+                'calc-sa-school',
+                'calc-sa-months',
+                'calc-monthly-living',
+                'calc-conversion-flying',
+                'calc-visa-flight',
+                'calc-dgca-exam'
+            ];
+
+            selectors.forEach(id => {
+                document.getElementById(id).addEventListener('input', runCostCalculator);
+            });
+
+            runCostCalculator();
+        }
+
+        function runCostCalculator() {
+            const schoolId = document.getElementById('calc-sa-school').value;
+            const months = parseFloat(document.getElementById('calc-sa-months').value) || 0;
+            const monthlyLiving = parseFloat(document.getElementById('calc-monthly-living').value) || 0;
+            const convFlyingLakhs = parseFloat(document.getElementById('calc-conversion-flying').value) || 0;
+            const visaFlight = parseFloat(document.getElementById('calc-visa-flight').value) || 0;
+            const dgcaExams = parseFloat(document.getElementById('calc-dgca-exam').value) || 0;
+
+            const selectedSchool = academies.find(a => a.id == schoolId);
+            if (!selectedSchool) return;
+
+            document.getElementById('calc-out-academy-name').textContent = selectedSchool.name;
+
+            // Math Operations
+            const baseCostLakhs = selectedSchool.costNumeric;
+            const livingCostLakhs = (months * monthlyLiving) / 100000;
+            const logisticsCostLakhs = (visaFlight + dgcaExams) / 100000;
+            
+            const totalConvertedCost = baseCostLakhs + livingCostLakhs + convFlyingLakhs + logisticsCostLakhs;
+
+            // Display Results
+            document.getElementById('calc-out-base').textContent = `₹${baseCostLakhs.toFixed(2)} L`;
+            document.getElementById('calc-out-living').textContent = `₹${livingCostLakhs.toFixed(2)} L`;
+            document.getElementById('calc-out-conv').textContent = `₹${convFlyingLakhs.toFixed(2)} L`;
+            document.getElementById('calc-out-logs').textContent = `₹${logisticsCostLakhs.toFixed(2)} L`;
+            document.getElementById('calc-out-total').textContent = `₹${totalConvertedCost.toFixed(2)} Lakhs`;
+
+            // Contrast Direct Route Savings
+            const domesticDirectAverage = 46.0; // benchmark direct cost in India
+            const contrastDiff = domesticDirectAverage - totalConvertedCost;
+
+            const savingsElement = document.getElementById('calc-savings-comparison');
+            if (contrastDiff >= 0) {
+                savingsElement.textContent = `₹${contrastDiff.toFixed(2)} Lakhs`;
+                savingsElement.className = "text-emerald-400 font-bold";
+            } else {
+                savingsElement.textContent = `-₹${Math.abs(contrastDiff).toFixed(2)} Lakhs (Extra cost)`;
+                savingsElement.className = "text-rose-400 font-bold";
+            }
+        }
+
+        // Export active spreadsheet database to standard CSV file format
+        function exportToCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,";
+            
+            // Header Row
+            csvContent += "Flight School Name,Country,City Location,Rank Category,Authority Score,Estimated Cost,Estimated Duration\n";
+            
+            // Data Rows
+            academies.forEach(acad => {
+                const escapedName = `"${acad.name.replace(/"/g, '""')}"`;
+                const escapedLocation = `"${acad.location.replace(/"/g, '""')}"`;
+                const escapedCost = `"${acad.costText.replace(/"/g, '""')}"`;
+                const escapedDuration = `"${acad.durationText.replace(/"/g, '""')}"`;
+                
+                const row = [
+                    escapedName,
+                    acad.country,
+                    escapedLocation,
+                    acad.rank,
+                    acad.rating,
+                    escapedCost,
+                    escapedDuration
+                ].join(",");
+                
+                csvContent += row + "\n";
+            });
+
+            // Trigger click simulation down the viewport
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "AeroPath_Flight_Schools_Export_2026.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
+</body>
+</html>
